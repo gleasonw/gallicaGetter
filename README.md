@@ -1,7 +1,7 @@
 # gallicaGetter
 
 This tool wraps a few endpoints from the [Gallica API](https://api.bnf.fr/api-gallica-de-recherche) to allow multi-threaded data retrieval with support
-for generators. 
+for generators. Go ahead, explore some archived French periodicals, and a few international editions too!
 
 I developed this tool into a [graphing app](https://d32d5ops9ui5td.cloudfront.net/) similar to Google's n-gram viewer for books. 
 
