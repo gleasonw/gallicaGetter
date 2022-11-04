@@ -1,13 +1,21 @@
 # gallicaGetter
 
 This tool wraps a few endpoints from the Gallica API to allow multi-threaded data retrieval with support
-for generators. I'll be adding much more documentation soon -- just wanted to get this out there! Pull requests welcome.
+for generators. I'll be adding documentation soon. Pull requests are welcome.
 
 Current endpoints are:
 * 'sru' -- word occurrences
 * 'content' -- occurrence context and page numbers
 * 'papers' -- paper metadata
 * 'issues' -- years published for a given paper
+
+# Installation
+
+```sh
+
+pip install gallicaGetter
+
+```
 
 The tool's functionality has evolved around my application's needs, but it should be easy to extend.
 
