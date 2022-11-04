@@ -1,7 +1,7 @@
 # gallicaGetter
 
 This tool wraps a few endpoints from the Gallica API to allow multi-threaded data retrieval with support
-for generators. I'll be adding much more documentation soon -- just wanted to get this out there! Pull requests welcome.
+for generators. I'll be adding much more documentation soon -- pull requests welcome.
 
 Current endpoints are:
 * 'sru' -- word occurrences
