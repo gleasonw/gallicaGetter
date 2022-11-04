@@ -9,6 +9,14 @@ Current endpoints are:
 * 'papers' -- paper metadata
 * 'issues' -- years published for a given paper
 
+# Installation
+
+```sh
+
+pip install gallicaGetter
+
+```
+
 The tool's functionality has evolved around my application's needs, but it should be easy to extend.
 
 # Examples
