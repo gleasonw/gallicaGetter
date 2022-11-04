@@ -1,9 +1,9 @@
-from .query import OccurrenceQuery
-from .gallicaxmlparse import GallicaXMLparse
-from .query import ArkQueryForNewspaperYears
-from .query import PaperQuery
-from .query import ContentQuery
-from .dateGrouping import DateGrouping
+from gallicaGetter.query import OccurrenceQuery
+from gallicaGetter.gallicaxmlparse import GallicaXMLparse
+from gallicaGetter.query import ArkQueryForNewspaperYears
+from gallicaGetter.query import PaperQuery
+from gallicaGetter.query import ContentQuery
+from gallicaGetter.dateGrouping import DateGrouping
 import logging
 
 NUM_CODES_PER_BUNDLE = 10
@@ -102,10 +102,9 @@ class OccurrenceQueryBuilder(QueryBuilder):
 
 class PaperQueryBuilder(QueryBuilder):
 
-    def buildQueriesForArgs(self, args):
-        codes = args.get('codes')
-        if codes is None:
-            logging.warning('No codes provided (get(codes=["..."]) or get(codes="...")). Proceeding to fetch all papers on Gallica. Stop me if you wish!')
+    def buildQueriesForArgs(self, codes):
+        if codes == '':
+            logging.warning('No codes provided (get(["..."]) or get("something") Proceeding to fetch all papers on Gallica. Stop me if you wish!')
             return self.buildSRUQueriesForAllRecords()
         if not isinstance(codes, list):
             codes = [codes]
@@ -132,6 +131,8 @@ class PaperQueryBuilder(QueryBuilder):
         ])
 
     def buildArkQueriesForCodes(self, codes):
+        if type(codes) == str:
+            codes = [codes]
         return [
             ArkQueryForNewspaperYears(code=code)
             for code in codes

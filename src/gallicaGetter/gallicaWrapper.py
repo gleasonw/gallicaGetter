@@ -1,9 +1,8 @@
-from .recordGetter import RecordGetter
-from .queryBuilder import OccurrenceQueryBuilder
-from .queryBuilder import ContentQueryFactory
-from .concurrentFetch import ConcurrentFetch
-from .queryBuilder import PaperQueryBuilder
-from .parseRecord import buildParser
+from gallicaGetter.queryBuilder import OccurrenceQueryBuilder
+from gallicaGetter.queryBuilder import ContentQueryFactory
+from gallicaGetter.concurrentFetch import ConcurrentFetch
+from gallicaGetter.queryBuilder import PaperQueryBuilder
+from gallicaGetter.parseRecord import buildParser
 
 
 class GallicaWrapper:
@@ -24,12 +23,14 @@ class GallicaWrapper:
 
     def buildQueryBuilder(self):
         raise NotImplementedError(f'buildQueryBuilder() not implemented for {self.__class__.__name__}')
-
-    def buildRecordGetter(self, parser=None):
-        return RecordGetter(
-            gallicaAPI=self.api,
-            parseData=parser or self.buildParser()
+        
+    def getFromQueries(self, queries, parser, onUpdateProgress=None):
+        rawResponse = self.api.get(
+            queries,
+            onUpdateProgress=onUpdateProgress
         )
+        records = parser.parseResponsesToRecords(rawResponse)
+        return records
 
     def buildParser(self):
         pass
@@ -49,23 +50,18 @@ class SRUWrapper(GallicaWrapper):
             requestID=kwargs.get('requestID')
         )
 
-    def get(self, onUpdateProgress=None, generate=False, queriesWithCounts=None, **kwargs):
+    def get(self, terms, onUpdateProgress=None, generate=False, queriesWithCounts=None, **kwargs):
         grouping = kwargs.get('grouping')
+        kwargs['terms'] = terms
         if grouping is None:
             grouping = 'year'
             kwargs['grouping'] = grouping
-        recordGetter = self.buildRecordGetterForGrouping(grouping)
-        recordGenerator = recordGetter.getFromQueries(
+        recordGenerator = self.getFromQueries(
             queries=self.buildQueries(kwargs, queriesWithCounts),
+            parser=self.soloRecordParser if grouping == 'all' else self.groupedRecordParser,
             onUpdateProgress=onUpdateProgress
         )
         return recordGenerator if generate else list(recordGenerator)
-
-    def buildRecordGetterForGrouping(self, grouping):
-        if grouping == 'all':
-            return self.buildRecordGetter(self.soloRecordParser)
-        else:
-            return self.buildRecordGetter(self.groupedRecordParser)
 
     def buildQueries(self, kwargs, queriesWithCounts):
         if queriesWithCounts:
@@ -90,12 +86,14 @@ class SRUWrapper(GallicaWrapper):
 class IssuesWrapper(GallicaWrapper):
 
     def preInit(self, kwargs):
-        self.recordGetter = self.buildRecordGetter()
+        self.parser = self.buildParser()
 
-    def get(self, generate=False, **kwargs):
-        codes = kwargs.get('codes')
+    def get(self, codes, generate=False):
         queries = self.queryBuilder.buildArkQueriesForCodes(codes)
-        recordGenerator = self.recordGetter.getFromQueries(queries)
+        recordGenerator = self.getFromQueries(
+            queries,
+            parser=self.parser
+        )
         return recordGenerator if generate else list(recordGenerator)
 
     def buildParser(self):
@@ -114,14 +112,17 @@ class IssuesWrapper(GallicaWrapper):
 class ContentWrapper(GallicaWrapper):
 
     def preInit(self, kwargs):
-        self.recordGetter = self.buildRecordGetter()
+        self.parser = buildParser('content')
 
     def get(self, ark, term, generate=False):
         query = self.queryBuilder.buildQueryForArkAndTerm(
             ark=ark,
             term=term
         )
-        recordGen = self.recordGetter.getFromQueries([query])
+        recordGen = self.getFromQueries(
+            queries=query,
+            parser=self.parser
+        )
         return recordGen if generate else list(recordGen)
 
     def buildQueryBuilder(self):
@@ -139,14 +140,19 @@ class ContentWrapper(GallicaWrapper):
 
 class PapersWrapper(GallicaWrapper):
 
-    def get(self, stateHooks=None, **kwargs):
-        SRUrecordGetter = self.buildRecordGetter()
-        queries = self.queryBuilder.buildQueriesForArgs(kwargs)
-        recordGenerator = SRUrecordGetter.getFromQueries(queries)
+    def preInit(self, kwargs):
+        self.parser = self.buildParser()
+        self.issuesWrapper = IssuesWrapper()
+
+    def get(self, argCodes, stateHooks=None, **kwargs):
+        queries = self.queryBuilder.buildQueriesForArgs(argCodes)
+        recordGenerator = self.getFromQueries(
+            queries,
+            parser=self.parser,
+        )
         sruPaperRecords = list(recordGenerator)
         codes = [record.code for record in sruPaperRecords]
-        issueWrapper = IssuesWrapper()
-        yearRecords = issueWrapper.get(codes=codes)
+        yearRecords = self.issuesWrapper.get(codes)
         yearsAsDict = {record.code: record.years for record in yearRecords}
         for record in sruPaperRecords:
             record.addYearsFromArk(yearsAsDict[record.code])
@@ -166,16 +172,3 @@ class PapersWrapper(GallicaWrapper):
 
     def buildParser(self):
         return buildParser('paper')
-
-
-if __name__ == '__main__':
-    sruWrapper = connect('sru', numWorkers=10)
-    records = sruWrapper.get(
-        terms='brazza',
-        grouping='year',
-        generate=True,
-        startDate='1900',
-        endDate='1910'
-    )
-    for record in records:
-        print(record.getRow())

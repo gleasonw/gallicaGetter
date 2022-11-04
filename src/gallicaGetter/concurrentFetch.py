@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
-from .get import Get
+from gallicaGetter.get import Get
 
 NUM_WORKERS = 30
 
@@ -17,6 +17,8 @@ class ConcurrentFetch:
 
     #TODO: implement text snippets every 20 seconds or so. Fun way to pass the time
     def get(self, queries, onUpdateProgress=None) -> list:
+        if type(queries) is not list:
+            queries = [queries]
         with ThreadPoolExecutor(max_workers=self.numWorkers) as executor:
             for response in executor.map(self.api.get, queries):
                 onUpdateProgress and onUpdateProgress(
