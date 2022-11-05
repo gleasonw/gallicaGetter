@@ -6,8 +6,8 @@ from gallicaGetter.parseRecord import buildParser
 
 
 class GallicaWrapper:
-    def __init__(self, **kwargs):
-        self.api = self.buildAPI(kwargs.get('numWorkers', 10))
+    def __init__(self, numWorkers=10, **kwargs):
+        self.api = self.buildAPI(numWorkers)
         self.parser = None
         self.queryBuilder = self.buildQueryBuilder()
         self.preInit(kwargs)

@@ -4,7 +4,7 @@ from gallicaGetter.gallicaWrapper import ContentWrapper
 from gallicaGetter.gallicaWrapper import PapersWrapper
 
 
-def connect(gallicaAPIselect, **kwargs):
+def connect(gallicaAPIselect, numWorkers=10):
     apiWrappers = {
         'sru': SRUWrapper,
         'issues': IssuesWrapper,
@@ -14,4 +14,4 @@ def connect(gallicaAPIselect, **kwargs):
     api = gallicaAPIselect.lower()
     if api not in apiWrappers:
         raise ValueError(f'API "{api}" not supported. Options are {apiWrappers.keys()}')
-    return apiWrappers[api](**kwargs)
+    return apiWrappers[api](numWorkers)

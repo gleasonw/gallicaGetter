@@ -20,7 +20,29 @@ Current endpoints are:
 ```sh
 pip install gallicaGetter
 ```
-# SRU examples
+# SRU quickstart
+
+Build the wrapper object using the ```connect()``` factory:
+```python
+import gallicaGetter
+
+sruWrapper = gallicaGetter.connect('sru')
+```
+Then, retrieve records or counts using ```get()```. Parameters are built into queries to the Gallica API.
+
+```get(terms, generate=False, **kwargs)```
+
+PARAMETERS:
+* **terms**: a string, or list of strings, to search for.
+* **startDate**: lower year boundary for the search.
+* **endDate**: upper year boundary for the search.
+* **codes**: string paper codes to restrict the search. Can be found in the URL of a Gallica periodical's page.
+* **grouping**: 'year', 'month', or 'all'
+* **generate**: if True, returns a generator object. Otherwise, returns a list of results.
+* **linkTerm**: a string that restricts the search to occurrences within its proximity. 
+* **linkDistance**: proximity distance in words.
+
+# SRU Examples
 
 Retrieve the number of occurrences of "Victor Hugo" across the Gallica archive from 1800 to 1900, by year, running 30 requests in parallel.
 
@@ -99,25 +121,6 @@ recordGenerator = sruWrapper.get(
 for i in range(10):
     print(next(recordGenerator).getRow())
 ```
-
-Get occurrence series for more than one term by passing a list.
-    
-```python
-import gallicaGetter
-
-sruWrapper = gallicaGetter.connect('sru')
-
-records = sruWrapper.get(
-    terms=["Paris", "Londres"],
-    startDate="1890",
-    endDate="1900",
-    grouping="year"
-)
-
-for record in records:
-    print(record.getRow())
-```
-
 
 
 
