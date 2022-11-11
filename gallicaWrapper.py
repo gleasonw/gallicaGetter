@@ -50,14 +50,7 @@ class SRUWrapper(GallicaWrapper):
             requestID=kwargs.get('requestID')
         )
 
-    def get(
-            self,
-            terms,
-            onUpdateProgress=None,
-            generate=False,
-            queriesWithCounts=None,
-            **kwargs
-    ):
+    def get(self, terms, onUpdateProgress=None, generate=False, queriesWithCounts=None, **kwargs):
         grouping = kwargs.get('grouping')
         kwargs['terms'] = terms
         if grouping is None:
