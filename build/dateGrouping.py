@@ -46,11 +46,8 @@ def makeYearGroupings(startDate, endDate):
             (f"{markerDate.getYear()}-01-01",
              f"{int(markerDate.getYear()) + 1}-01-01")
         ]
-    yearGroups = set()
     lowEnd, highEnd = sorted([int(startDate.getYear()), int(endDate.getYear())])
-    for year in range(lowEnd, highEnd + 1):
-        yearGroups.add((f"{year}-01-01", f"{year + 1}-01-01"))
-    return yearGroups
+    return [(f"{year}-01-01", f"{year + 1}-01-01") for year in range(lowEnd, highEnd + 1)]
 
 
 def makeMonthGroupings(startDate, endDate):
