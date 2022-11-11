@@ -118,8 +118,8 @@ recordGenerator = sruWrapper.get(
     generate=True
 )
 
-for i in range(10):
-    print(next(recordGenerator).getRow())
+for record in recordGenerator:
+    print(record.getRow())
 ```
 
 
