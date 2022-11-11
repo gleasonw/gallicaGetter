@@ -1,13 +1,13 @@
-from gallicaGetter.queryBuilder import OccurrenceQueryBuilder
-from gallicaGetter.queryBuilder import ContentQueryFactory
-from gallicaGetter.concurrentFetch import ConcurrentFetch
-from gallicaGetter.queryBuilder import PaperQueryBuilder
-from gallicaGetter.parseRecord import buildParser
+from gallicaGetter.build.queryBuilder import OccurrenceQueryBuilder
+from gallicaGetter.build.queryBuilder import ContentQueryFactory
+from gallicaGetter.fetch.concurrentFetch import ConcurrentFetch
+from gallicaGetter.build.queryBuilder import PaperQueryBuilder
+from gallicaGetter.parse.parseRecord import buildParser
 
 
 class GallicaWrapper:
-    def __init__(self, numWorkers=10, **kwargs):
-        self.api = self.buildAPI(numWorkers)
+    def __init__(self, **kwargs):
+        self.api = self.buildAPI(kwargs.get('numWorkers', 10))
         self.parser = None
         self.queryBuilder = self.buildQueryBuilder()
         self.preInit(kwargs)
@@ -50,7 +50,14 @@ class SRUWrapper(GallicaWrapper):
             requestID=kwargs.get('requestID')
         )
 
-    def get(self, terms, onUpdateProgress=None, generate=False, queriesWithCounts=None, **kwargs):
+    def get(
+            self,
+            terms,
+            onUpdateProgress=None,
+            generate=False,
+            queriesWithCounts=None,
+            **kwargs
+    ):
         grouping = kwargs.get('grouping')
         kwargs['terms'] = terms
         if grouping is None:
@@ -172,3 +179,9 @@ class PapersWrapper(GallicaWrapper):
 
     def buildParser(self):
         return buildParser('paper')
+
+
+if __name__ == '__main__':
+    wrapper = SRUWrapper()
+    test = wrapper.get(terms='brazza')
+    print(len(test))
