@@ -28,7 +28,7 @@ import gallicaGetter
 
 sruWrapper = gallicaGetter.connect('sru')
 ```
-Then, retrieve records or counts using ```get()```. Parameters are built into queries to the Gallica API.
+Then, retrieve records or counts using ```get()```.
 
 ```get(terms, generate=False, **kwargs)```
 
