@@ -10,7 +10,7 @@ I owe inspiration for part of the API integration to queries written by the team
 
 
 Current endpoints are:
-* 'sru' -- for a term, get the number of occurrences over a time range or fetch all the periodical issues the term appears in. 
+* 'sru' -- for a term, get the number of volumes with at least one mention or fetch all the volumes the term appears in. 
 * 'content' -- occurrence context and page numbers
 * 'papers' -- paper titles and publishing range data, from their Gallica codes
 * 'issues' -- years published for a given paper (used internally in papers)
