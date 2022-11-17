@@ -30,7 +30,7 @@ contentWrapper = gallicaGetter.connect('content')
 
 ```
 Retrieve context using the ```get()``` method.
-```
+```python
 data = contentWrapper.get(
     ark='bpt6k270178t',
     term='guerre',
