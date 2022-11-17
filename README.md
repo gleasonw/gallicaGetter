@@ -22,12 +22,15 @@ pip install gallicaGetter
 
 This wrapper pairs best with an SRU fetch since the ark code for an issue is in the SRU response.
 
-Retrieve text context for all occurrences of "guerre" in an issue of the Figaro.
+Build the content wrapper using ```connect()```:
 ```python
 import gallicaGetter
 
 contentWrapper = gallicaGetter.connect('content')
 
+```
+Retrieve context using the ```get()``` method.
+```
 data = contentWrapper.get(
     ark='bpt6k270178t',
     term='guerre',
