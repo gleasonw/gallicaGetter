@@ -17,6 +17,26 @@ For an exact number of occurrences over a period, use [Pyllicagram](https://gith
 ```sh
 pip install gallicaGetter
 ```
+
+# Content example
+
+This wrapper pairs best with an SRU fetch since the ark code for an issue is in the SRU response.
+
+Retrieve text context for all occurrences of "guerre" in an issue of the Figaro.
+```python
+import gallicaGetter
+
+contentWrapper = gallicaGetter.connect('content')
+
+data = contentWrapper.get(
+    ark='bpt6k270178t',
+    term='guerre',
+)
+
+for numOccurrences, pages in data:
+    print(numOccurrences, pages)
+```
+
 # SRU quickstart
 
 Build the wrapper object using the ```connect()``` factory:
@@ -118,26 +138,6 @@ for record in recordGenerator:
     print(record.getRow())
 ```
 
-
-
-# Content example
-
-This wrapper pairs best with an SRU fetch since the ark code for an issue is in the SRU response.
-
-Retrieve text context for all occurrences of "guerre" in an issue of the Figaro.
-```python
-import gallicaGetter
-
-contentWrapper = gallicaGetter.connect('content')
-
-data = contentWrapper.get(
-    ark='bpt6k270178t',
-    term='guerre',
-)
-
-for numOccurrences, pages in data:
-    print(numOccurrences, pages)
-```
 # Papers example
 
 Retrieve metadata from a Gallica periodical's code. Example for "Le Temps":
