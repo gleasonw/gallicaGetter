@@ -4,7 +4,7 @@ This tool wraps a few endpoints from the [Gallica API](https://api.bnf.fr/api-ga
 
 Current endpoints are:
 * 'content' : context for term occurrence and page numbers
-* 'sru' : for a term, fetch all the volumes the term appears in. 
+* 'sru' : for a term, all the volumes the term appears in. 
 * 'papers' : paper titles and publishing range data
 * 'issues' : years published for a paper (used internally in papers)
 
