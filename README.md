@@ -40,7 +40,7 @@ for numOccurrences, pages in data:
     print(numOccurrences, pages)
 ```
 
-# SRU quickstart
+# SRU examples
 
 Build the wrapper object using the ```connect()``` factory:
 ```python
@@ -61,8 +61,6 @@ PARAMETERS:
 * **generate**: if True, returns a generator object. Otherwise, returns a list of results.
 * **linkTerm**: a string that restricts the search to occurrences within its proximity. 
 * **linkDistance**: proximity distance in words.
-
-# SRU Examples
 
 Retrieve the number of volumes with >= 1 mention of "Victor Hugo" across the Gallica archive from 1800 to 1900, by year, running 30 requests in parallel.
 
