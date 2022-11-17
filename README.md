@@ -4,13 +4,13 @@ This tool wraps a few endpoints from the [Gallica API](https://api.bnf.fr/api-ga
 
 Current endpoints are:
 * 'content' : context for term occurrence and page numbers
-* 'sru' : for a term, get the number of volumes with at least one mention or fetch all the volumes the term appears in. 
+* 'sru' : for a term, get the number of volumes with at least 1 occurrence or fetch all the volumes the term appears in. 
 * 'papers' : paper titles and publishing range data
 * 'issues' : years published for a paper (used internally in papers)
 
 I developed this tool into a [graphing app](https://d32d5ops9ui5td.cloudfront.net/) similar to Google's n-gram viewer for books. 
 
-[Gallicagram](https://shiny.ens-paris-saclay.fr/app/gallicagram). 
+For an exact number of occurrences over a period, use [Pyllicagram](https://github.com/regicid/pyllicagram).
 
 # Installation
 
