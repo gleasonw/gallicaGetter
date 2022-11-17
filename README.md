@@ -1,19 +1,16 @@
 # gallicaGetter
 
-This tool wraps a few endpoints from the [Gallica API](https://api.bnf.fr/api-gallica-de-recherche) to allow multi-threaded data retrieval with support
-for generators. Go ahead, explore some archived French periodicals, and a few international editions too!
+This tool wraps a few endpoints from the [Gallica API](https://api.bnf.fr/api-gallica-de-recherche).
+
+Current endpoints are:
+* 'content' : context for term occurrence and page numbers
+* 'sru' : for a term, get the number of volumes with at least one mention or fetch all the volumes the term appears in. 
+* 'papers' : paper titles and publishing range data
+* 'issues' : years published for a paper (used internally in papers)
 
 I developed this tool into a [graphing app](https://d32d5ops9ui5td.cloudfront.net/) similar to Google's n-gram viewer for books. 
 
-I owe inspiration for part of the API integration to queries written by the team at [Gallicagram](https://shiny.ens-paris-saclay.fr/app/gallicagram). 
-
-
-
-Current endpoints are:
-* 'sru' -- for a term, get the number of volumes with at least one mention or fetch all the volumes the term appears in. 
-* 'content' -- occurrence context and page numbers
-* 'papers' -- paper titles and publishing range data, from their Gallica codes
-* 'issues' -- years published for a given paper (used internally in papers)
+[Gallicagram](https://shiny.ens-paris-saclay.fr/app/gallicagram). 
 
 # Installation
 
@@ -44,7 +41,7 @@ PARAMETERS:
 
 # SRU Examples
 
-Retrieve the number of occurrences of "Victor Hugo" across the Gallica archive from 1800 to 1900, by year, running 30 requests in parallel.
+Retrieve the number of volumes with >= 1 mention of "Victor Hugo" across the Gallica archive from 1800 to 1900, by year, running 30 requests in parallel.
 
 ```python
 import gallicaGetter
@@ -61,7 +58,7 @@ records = sruWrapper.get(
 for record in records:
     print(record.getRow())
 ```
-Retrieve all issues that mention "Brazza" from 1890 to 1900.
+Retrieve 15 issues that mention "Brazza" from 1890 to 1900.
 
 ```python
 import gallicaGetter
@@ -72,7 +69,8 @@ records = sruWrapper.get(
     terms="Brazza",
     startDate="1890",
     endDate="1900",
-    grouping="all"
+    grouping="all",
+    numRecords=15
 )
 
 for record in records:
@@ -101,8 +99,7 @@ for record in records:
 ```
 
 
-Retrieve all issues mentioning "Paris" in the papers "Le Temps" and "Le Figaro" from 1890 to 1900, using
-a generator.
+Retrieve all issues mentioning "Paris" in the papers "Le Temps" and "Le Figaro" from 1890 to 1900.
 
 ```python
 import gallicaGetter
@@ -114,8 +111,7 @@ recordGenerator = sruWrapper.get(
     startDate="1890",
     endDate="1900",
     grouping="all",
-    codes=["cb34431794k", "cb34355551z"],
-    generate=True
+    codes=["cb34431794k", "cb34355551z"]
 )
 
 for record in recordGenerator:
