@@ -4,7 +4,8 @@ This tool wraps a few endpoints from the [Gallica API](https://api.bnf.fr/api-ga
 
 Current endpoints are:
 * 'content' : context for term occurrence and page numbers
-* 'sru' : for a term, all the volumes the term appears in. 
+* 'sru' : for a term, all the volumes the term appears in 
+* 'text' : full text for a volume on Gallica
 * 'papers' : paper titles and publishing range data
 * 'issues' : years published for a paper (used internally in papers)
 
@@ -22,22 +23,20 @@ pip install gallicaGetter
 
 This wrapper pairs best with an SRU fetch since the ark code for an issue is in the SRU response.
 
-Build the content wrapper using ```connect()```:
+Build the content wrapper using ```connect()```, fetch using ```get()```:
 ```python
 import gallicaGetter
 
 contentWrapper = gallicaGetter.connect('content')
 
-```
-Retrieve context using the ```get()``` method.
-```python
 data = contentWrapper.get(
     ark='bpt6k270178t',
     term='guerre',
 )
 
-for numOccurrences, pages in data:
-    print(numOccurrences, pages)
+for contentRecord in data:
+    print(contentRecord.num_results)
+    print(contentRecord.get_pages())
 ```
 
 # SRU examples
@@ -139,6 +138,21 @@ for record in recordGenerator:
     print(record.getRow())
 ```
 
+# Full text example
+
+Retrieve a volume's text from its ark code. Pass a list of codes to retrieve multiple sets of text.
+
+```python
+import gallicaGetter
+
+textWrapper = gallicaGetter.connect('text')
+
+data = textWrapper.get('bpt6k270178t')
+
+for textRecord in data:
+    print(textRecord.get_ocr_quality())
+    print(textRecord.get_text())
+```
 # Papers example
 
 Retrieve metadata from a Gallica periodical's code. Example for "Le Temps":
