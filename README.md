@@ -9,7 +9,7 @@ Current endpoints are:
 * 'papers' : paper titles and publishing range data
 * 'issues' : years published for a paper (used internally in papers)
 
-I developed this tool into a [graphing app](https://d32d5ops9ui5td.cloudfront.net/) similar to Google's n-gram viewer for books. 
+I developed this tool into a [graphing app](https://d32d5ops9ui5td.cloudfront.net/) similar to Google's n-gram viewer for books. There is much more metadata in the Gallica API response I don't currently parse. Happy to add more; pull requests are also welcome! 
 
 For an exact number of occurrences over a period, use [Pyllicagram](https://github.com/regicid/pyllicagram).
 
