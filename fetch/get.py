@@ -1,13 +1,19 @@
 import time
-from gallicaGetter.fetch.response import Response
 from urllib3.util.retry import Retry
 import urllib3
 
 
+class Response:
+
+    def __init__(self, data, query, elapsed):
+        self.data = data
+        self.query = query
+        self.elapsed = elapsed
+
+
 class Get:
 
-    def __init__(self, baseUrl, maxSize=50):
-        self.baseUrl = baseUrl
+    def __init__(self, maxSize=50):
         self.maxSize = maxSize
         self.http = self.buildUrllib3()
 
@@ -27,8 +33,8 @@ class Get:
         start = time.perf_counter()
         response = self.http.request(
             "GET",
-            self.baseUrl,
-            fields=query.getFetchParams()
+            query.get_endpoint_url(),
+            fields=query.get_params_for_fetch()
         )
         end = time.perf_counter()
         if response.status != 200:
@@ -38,3 +44,4 @@ class Get:
             query=query,
             elapsed=end - start
         )
+

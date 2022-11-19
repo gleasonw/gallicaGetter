@@ -1,4 +1,8 @@
-# Boiler plate Github .gitignore 
+# Boiler plate Github .gitignore
+
+venv
+.idea
+*.pyc
 
 
 # Byte-compiled / optimized / DLL files

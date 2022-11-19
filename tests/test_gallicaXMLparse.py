@@ -1,6 +1,6 @@
 from unittest import TestCase
-from gallicaxmlparse import GallicaXMLparse
-from date import Date
+from gallicaGetter.parse.gallicaxmlparse import GallicaXMLparse
+from gallicaGetter.parse.date import Date
 import os
 
 here = os.path.dirname(os.path.abspath(__file__))
@@ -36,7 +36,7 @@ class TestGallicaXMLparse(TestCase):
 
     def test_get_num_records(self):
         self.assertEqual(
-            self.parse.getNumRecords(self.occurrencesXML),
+            self.parse.get_num_records(self.occurrencesXML),
             78514
         )
 
